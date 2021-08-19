@@ -1,0 +1,401 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/authors": {
+            "post": {
+                "operationId": "Create",
+                "summary": "Create an author",
+                "description": "This API crates an new author. Author must be creted prior to creating the books.\n        Use author unique identifier(id) field to update link the book with it's author.",
+                "tags": [
+                    "authors"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateAuthor"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Author"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "List",
+                "summary": "List all authors",
+                "description": "This API list all authors as per filter criteria. This API returns paginated list with other pagination meta data\n        such as total records, current page, limit, etc. Authors can be filtered and sorted as per allowed search criteria.",
+                "tags": [
+                    "authors"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateAuthor"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Author"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/authors/{id}": {
+            "get": {
+                "operationId": "Get",
+                "summary": "Get an author",
+                "description": "This API returns the individual author details by unqiue identifier. Attempt to retrive non existent author will fail.",
+                "tags": [
+                    "authors"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Author"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record does not exists with given id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "operationId": "Update",
+                "summary": "Update an author",
+                "description": "Update existing author details. Check schema and example for what feilds are allow to be updated in the author object. Attempt\n        to update non existent author will fail.",
+                "tags": [
+                    "authors"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateAuthor"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Author"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Record does not exists with given id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "Delete",
+                "summary": "Delete an author",
+                "description": "Delete existing autor by unique identifier. Attempt\n        to update non existent author will fail. Author can not be deleted if it's associated with any books, deleting such authors\n        will fail. Delete the books associated with authors before deleting the author. Delete operation returns empty response\n        on successful deletion of the author.",
+                "tags": [
+                    "authors"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "404": {
+                        "description": "Record does not exists with given id",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "info": {
+        "title": "Book store API",
+        "description": "Book store API provides APIs to manage authors its and books, also reviews given for the book.",
+        "version": "1.0",
+        "contact": {},
+        "termsOfService": "www.example.com/terms"
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+        "schemas": {
+            "ApiError": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string",
+                        "description": "Error code",
+                        "example": "input_validation_error"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Error title",
+                        "example": "Validation Error"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Error title",
+                        "example": "name paraemter is required, name parameter must be string"
+                    },
+                    "help": {
+                        "type": "string",
+                        "description": "Link to the error explanation and help",
+                        "example": "https://example.com/help/errors/input_validation_error"
+                    }
+                }
+            },
+            "CreateAuthor": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the author",
+                        "example": "Michael Scofield",
+                        "title": "Author Name",
+                        "minLength": 3,
+                        "maxLength": 50
+                    },
+                    "date_of_birth": {
+                        "type": "string",
+                        "description": "Authors date of birth in format yyyy-dd-MM",
+                        "example": "1992-10-01",
+                        "format": "date-time",
+                        "title": "Date of birth",
+                        "minLength": 3
+                    },
+                    "total_books": {
+                        "type": "number",
+                        "description": "Total number of books written by author",
+                        "example": 13,
+                        "title": "Total Books",
+                        "minimum": 1,
+                        "maximum": 1000
+                    },
+                    "genre_expert": {
+                        "type": "array",
+                        "description": "Total number of books written by author",
+                        "example": [
+                            "Fiction",
+                            "Novel"
+                        ],
+                        "title": "Genre Expert",
+                        "uniqueItems": true,
+                        "maxItems": 30,
+                        "minItems": 1,
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "Fiction",
+                                "Novel",
+                                "Narrative"
+                            ]
+                        }
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Authors email to contact",
+                        "example": "michael.scofield@example.com",
+                        "title": "Email",
+                        "format": "email",
+                        "pattern": "^(.+)@(.+)$",
+                        "minLength": 4,
+                        "maxLength": 50
+                    },
+                    "phone": {
+                        "type": "string",
+                        "description": "Authors phone to contact ",
+                        "example": "+917350088996",
+                        "title": "Phone",
+                        "format": "phone",
+                        "pattern": "/^[0-9()-]+$/",
+                        "minLength": 5,
+                        "maxLength": 15
+                    }
+                },
+                "required": [
+                    "name"
+                ]
+            },
+            "Author": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the author",
+                        "example": "Michael Scofield",
+                        "title": "Author Name",
+                        "minLength": 3,
+                        "maxLength": 50
+                    },
+                    "date_of_birth": {
+                        "type": "string",
+                        "description": "Authors date of birth in format yyyy-dd-MM",
+                        "example": "1992-10-01",
+                        "format": "date-time",
+                        "title": "Date of birth",
+                        "minLength": 3
+                    },
+                    "total_books": {
+                        "type": "number",
+                        "description": "Total number of books written by author",
+                        "example": 13,
+                        "title": "Total Books",
+                        "minimum": 1,
+                        "maximum": 1000
+                    },
+                    "genre_expert": {
+                        "type": "array",
+                        "description": "Total number of books written by author",
+                        "example": [
+                            "Fiction",
+                            "Novel"
+                        ],
+                        "title": "Genre Expert",
+                        "uniqueItems": true,
+                        "maxItems": 30,
+                        "minItems": 1,
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "Fiction",
+                                "Novel",
+                                "Narrative"
+                            ]
+                        }
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Authors email to contact",
+                        "example": "michael.scofield@example.com",
+                        "title": "Email",
+                        "format": "email",
+                        "pattern": "^(.+)@(.+)$",
+                        "minLength": 4,
+                        "maxLength": 50
+                    },
+                    "phone": {
+                        "type": "string",
+                        "description": "Authors phone to contact ",
+                        "example": "+917350088996",
+                        "title": "Phone",
+                        "format": "phone",
+                        "pattern": "/^[0-9()-]+$/",
+                        "minLength": 5,
+                        "maxLength": 15
+                    },
+                    "id": {
+                        "type": "string",
+                        "description": "Unique identifier for the author",
+                        "format": "uuid",
+                        "example": "b3d8a2dc-fde0-11eb-9a03-0242ac130003"
+                    }
+                },
+                "required": [
+                    "name"
+                ]
+            }
+        }
+    }
+}
